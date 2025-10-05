@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../controllers/userController');
-
-const { validateUser } = require('../middlewares/validation.middleware');
+const { validateUser, authRequestValidator, validateusername } = require('../middlewares/validation.middleware');
 
 // Simple router-level logger: logs method, path, baseUrl and timestamp for every request
 router.use((req, res, next) => {
@@ -13,18 +12,13 @@ router.use((req, res, next) => {
 	next();
 });
 
-// Sample route for user registration
+// Route for user registration
 router.post('/register', validateUser, userController.createUser);
 
-// Sample route for user login
-router.get('/all', (req, res) => {
-    // Login logic here
-    res.status(200).send('User logged in successfully');
-});
+// Route for getting all users
+router.get('/all', authRequestValidator, userController.getAllUsers);
 
-router.get('/:username', (req, res) => {
-    // Profile logic here
-    res.status(200).send('User profile data');
-});
+// Route for getting user profile by username
+router.get('/:username', validateusername, userController.getUserByUsername);
 
 module.exports = router;

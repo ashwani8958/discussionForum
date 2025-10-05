@@ -24,6 +24,33 @@ class UserService {
             throw error;
         }
     }
+
+    static async getAllUsers() {
+        try {
+            const users = await userModel.find({ }, '-__v').lean(); // exclude __v field lean() returns plain JS objects which is more efficient for read-only 
+            
+            // If no users found, throw an error
+            if(!users || users.length === 0) {
+                throw { message: 'No users found', reason: 'No Users in DB' };
+            }
+
+            return users;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getUserByUsername(username) {
+        try {
+            const user = await userModel.findOne({ username }, '-__v').lean();  
+            if (!user) {
+                throw { message: "User not found!", username };
+            }
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = UserService;
