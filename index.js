@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 //routes
 const userRoutes = require('./routes/user.routes');
+const discussionRoutes = require('./routes/discussion.routes');
 
 // Initialize Express app
 const server = express();
@@ -29,6 +30,7 @@ mongoose.connect(databaseURI, databaseName ? { dbName: databaseName } : {})
 server.use(express.json());
 
 server.use('/user', userRoutes);
+server.use('/discussion', discussionRoutes);
 
 server.listen(process.env.PORT, process.env.HOST, () => {
     console.log(`Discussion Forum Server is running on ${process.env.HOST}:${process.env.PORT}`);
